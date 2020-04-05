@@ -1,0 +1,10 @@
+local_data:
+  minecraft: "$HOME/minecraft-data"
+  teamspeak: "$HOME/teamspeak-data"
+
+s3_bucket:
+  minecraft: "king-streets-minecraft"
+  teamspeak: "king-streets-teamspeak"
+
+server_port:
+  minecraft: 25565
