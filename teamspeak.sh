@@ -8,7 +8,7 @@ if [ ! -d "$teamspeak_server_data" ]; then
 fi
 
 # Mount S3 bucket
-s3fs "$teamspeak_s3_bucket" "$teamspeak_server_data" -o allow_other
+s3fs "$teamspeak_s3_bucket" "$teamspeak_server_data" -o iam_role=auto -o allow_other
 
 # Start server
 docker run --name teamspeak \

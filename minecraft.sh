@@ -8,7 +8,7 @@ if [ ! -d "$minecraft_local_data" ]; then
 fi
 
 # Mount S3 bucket
-s3fs "$minecraft_s3_bucket" "$minecraft_local_data" -o allow_other
+s3fs "$minecraft_s3_bucket" "$minecraft_local_data" -o iam_role=auto -o allow_other
 
 # Start Minecraft
 docker run -d -it \
