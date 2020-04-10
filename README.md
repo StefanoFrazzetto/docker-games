@@ -85,16 +85,17 @@ Note: by running one of the servers listed here, you are accepting their respect
 If you wish to read the licenses, please check the scripts.
 
 ### Minecraft
-
-Source: https://github.com/itzg/docker-minecraft-server
 Default port: 25565
 
+Source: https://github.com/itzg/docker-minecraft-server
+
 ### TeamSpeak
+Default ports: 9987, 10011, 30033
 
 Docker image: https://hub.docker.com/_/teamspeak 
-Default ports: 9987, 10011, 30033
 
 ## Contributing
 
-Contributions are very welcome! 
+Contributions are very welcome!
+
 If you want to add another server or improve the existing scripts, please don't hesitate to submit a pull request!
