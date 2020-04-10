@@ -13,7 +13,7 @@ fi
 
 # Install s3fs
 amazon-linux-extras install epel
-yum install s3fs-fuse
+yum install s3fs-fuse figlet
 
 # Uncomment to allow 'others' to mount/write to the S3 bucket
 sudo sed -i '/user_allow_other/s/^# //g' /etc/fuse.conf
