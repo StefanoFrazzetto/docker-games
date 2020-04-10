@@ -12,7 +12,7 @@ s3fs "$minecraft_s3_bucket" "$minecraft_local_data" -o iam_role=auto -o allow_ot
 
 # Start Minecraft
 docker run -d -it \
-	--mount type=bind,src="$minecraft_server_data",target=/data \
+	--mount type=bind,src="$minecraft_local_data",target=/data \
 	-e EULA=TRUE \
 	-e MEMORY="$minecraft_server_memory" \
 	-e ONLINE_MODE="$minecraft_server_online_mode" \
