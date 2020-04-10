@@ -1,10 +1,11 @@
-local_data:
-  minecraft: "$HOME/minecraft-data"
-  teamspeak: "$HOME/teamspeak-data"
+minecraft:
+  local_data: "$HOME/minecraft-data"
+  s3_bucket:  "<YOUR_S3_BUCKET_NAME>"
+  server:
+    memory:       "1500M"
+    online_mode:  false
+    port:         25565
 
-s3_bucket:
-  minecraft: "king-streets-minecraft"
-  teamspeak: "king-streets-teamspeak"
-
-server_port:
-  minecraft: 25565
+teamspeak:
+  local_data: "$HOME/teamspeak-data"
+  s3_bucket:   "<YOUR_S3_BUCKET_NAME>"
