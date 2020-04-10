@@ -20,7 +20,7 @@ usermod -a -G docker ec2-user
 
 # Install s3fs-fuse
 amazon-linux-extras install epel -y
-yum install s3fs-fuse figlet
+yum install s3fs-fuse figlet -y
 
 # Uncomment to allow 'others' to mount/write to the S3 bucket
 sed -i '/user_allow_other/s/^# //g' /etc/fuse.conf
