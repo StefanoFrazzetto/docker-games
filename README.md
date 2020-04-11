@@ -1,7 +1,8 @@
 # AWSome Gaming Server
 
 This repository contains some scripts to help you run your own gaming server on AWS using Docker.
-All servers are run using Docker to avoid having to make the configuration as easy a possible.
+
+All servers are run using Docker to make the configuration as easy as possible.
 
 ## IAM
 
