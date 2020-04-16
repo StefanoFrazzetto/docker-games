@@ -2,14 +2,6 @@
 
 source functions.sh
 
-# Check data directory
-if [ ! -d "$minecraft_local_data" ]; then
-    mkdir "$minecraft_local_data"
-fi
-
-# Mount S3 bucket
-s3fs "$minecraft_s3_bucket" "$minecraft_local_data" -o iam_role=auto -o allow_other
-
 # Start Minecraft
 docker run -d -it \
 	--mount type=bind,src="$minecraft_local_data",target=/data \

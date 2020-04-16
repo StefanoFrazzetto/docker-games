@@ -5,7 +5,7 @@ set -e
 trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
 trap 'echo "\"${last_command}\" command filed with exit code $?."' ERR
 
-# Check for 'y' or 'yes', otherwise unset the trap and exit
+# Prompt the user for confirmation
 function ask_for_confirmation {
     echo -e "\n"
     while true; do
@@ -17,9 +17,9 @@ function ask_for_confirmation {
     esac
     done
     echo -e "\n"
-    #read -p "Do you want to proceed? (y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || trap - EXIT && echo "Exiting..." && exit 1
 }
 
+# Parse a yaml configuration file
 function parse_yaml {
    local prefix=$2
    local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
@@ -37,7 +37,7 @@ function parse_yaml {
    }'
 }
 
-# Get the script name
+# Get the script name via reference
 function get_script_name {
     filename=$(basename -- "$0")
     extension="${filename##*.}"
@@ -45,12 +45,22 @@ function get_script_name {
     eval "$1=$filename"
 }
 
-# Print the script name
+# Print the caller script name
 function print_script_name {
     # Get value by reference 
     get_script_name script_name
     figlet -f small "$script_name"
     echo -e "\n"
+}
+
+# Check if we're on an AWS instance
+# Source: https://serverfault.com/a/700771
+function is_aws_instance {
+    if [ -f /sys/hypervisor/uuid ] && [ `head -c 3 /sys/hypervisor/uuid` == ec2 ]; then
+        return 0 # true
+    else
+        return 1 # false
+    fi
 }
 
 # Print a nice banner
@@ -63,8 +73,28 @@ eval $(parse_yaml config.yaml)
 data_dir="${script_name}_local_data"
 s3_bucket="${script_name}_s3_bucket"
 
-# Get the variables' values by expansion
+# Get the values by expansion
 echo "Saving local data to ${!data_dir}"
-echo "The data will be stored into the following S3 bucket: s3://${!s3_bucket}"
 
-ask_for_confirmation
+# Check empty or missing S3 bucket variable
+if [ -z "${!s3_bucket}" ]; then
+    echo "S3 bucket not set. Your data will be saved locally, so make sure to create a backup!"
+    ask_for_confirmation
+else
+    echo "The data will be stored into the following S3 bucket: s3://${!s3_bucket}"
+    
+    ask_for_confirmation
+
+    # Finally mount the bucket
+    # TODO: Check if this is necessary
+    if is_aws_instance; then
+        s3fs "$minecraft_s3_bucket" "$minecraft_local_data" -o iam_role=auto -o allow_other
+    else
+        s3fs "$minecraft_s3_bucket" "$minecraft_local_data" -o allow_other
+    fi
+fi
+
+# Check if data directory
+if [ ! -d "${!data_dir}" ]; then
+    mkdir "${!data_dir}"
+fi
