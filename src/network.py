@@ -1,3 +1,5 @@
+from typing import List
+
 from validators import PortNumber
 
 
@@ -14,3 +16,7 @@ class PortMapping(object):
 
     def __str__(self) -> str:
         return f'{self.source_port}:{self.destination_port}'
+
+    @staticmethod
+    def list_to_dict(values: List['PortMapping']):
+        return {port.source_port: port.destination_port for port in values}

@@ -30,3 +30,13 @@ class TestPortMapping(TestCase):
         dest = 22
         with pytest.raises(ValueError):
             mapping = PortMapping(source, dest)
+
+    def test_list_to_dict(self):
+        ports = [
+            PortMapping('8081/tcp', 8080),
+            PortMapping(3500, 4040),
+        ]
+
+        result = PortMapping.list_to_dict(ports)
+        expected = {3500: 4040, '8081/tcp': 8080}
+        self.assertEqual(expected, result)
