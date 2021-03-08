@@ -3,7 +3,7 @@ from unittest import TestCase
 
 import pytest
 
-from src.validators import IPAddress, MemorySize, String, Directory, PortNumber
+from src.validators import IPAddress, MemorySize, String, Directory, PortNumber, DockerImage
 
 
 class TestMemorySize(TestCase):
@@ -154,3 +154,19 @@ class TestDirectory(TestCase):
         os.removedirs(self.dir_path)
         if os.path.exists(self.file_path) or os.path.exists(self.dir_path):
             raise RuntimeError(f'Failed to "{self.dir_path}" and/or its contents')
+
+
+class TestDockerImage(TestCase):
+
+    def test_get_images(self):
+        validator = DockerImage()
+        images = validator.get_images('ubuntu')
+        self.assertIsNotNone(images)
+
+    def test_validate_ubuntu(self):
+        validator = DockerImage()
+        validator.validate('ubuntu')
+
+    def test_validate_itzg_minecraft_server(self):
+        validator = DockerImage()
+        validator.validate('itzg/minecraft-server')

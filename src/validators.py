@@ -121,3 +121,20 @@ class Directory(Validator):
             raise ValueError(f'The path "{value}" is a file')
         if not self.allow_not_exist and not os.path.isdir(value):
             raise ValueError(f'The directory "{value}" does not exist')
+
+
+class DockerImage(Validator):
+
+    def validate(self, value):
+        images = DockerImage.get_images(value)
+        names = [image['name'] for image in images]
+        if not images or value not in names:
+            raise ValueError(f'Could not find Docker image "{value}"')
+
+    @staticmethod
+    def get_images(name: str, tag_or_digest: str = None):
+        import docker
+        client = docker.from_env()
+        # docker search does not find images when repository is specified
+        image_name = name.split('/')[-1]  # get last string after '/'
+        return client.images.search(image_name)
