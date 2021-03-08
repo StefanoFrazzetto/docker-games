@@ -1,0 +1,2 @@
+class MemorySizeError(Exception):
+    pass
