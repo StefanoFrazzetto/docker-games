@@ -156,6 +156,7 @@ class TestDirectory(TestCase):
             raise RuntimeError(f'Failed to "{self.dir_path}" and/or its contents')
 
 
+@pytest.mark.slow
 class TestDockerImage(TestCase):
 
     def test_get_images(self):

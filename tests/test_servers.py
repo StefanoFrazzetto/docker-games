@@ -6,6 +6,7 @@ from src.exceptions import MemorySizeError
 from src.servers import Minecraft, TeamSpeak
 
 
+@pytest.mark.slow
 class TestMinecraft(TestCase):
 
     def test_init_valid_values(self):
@@ -27,6 +28,7 @@ class TestMinecraft(TestCase):
         self.assertEqual(volume, minecraft.volume.dict())
 
 
+@pytest.mark.slow
 class TestTeamSpeak(TestCase):
 
     def test_init(self):
