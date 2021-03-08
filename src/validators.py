@@ -70,21 +70,21 @@ class Number(Validator):
 class MemorySize(Validator):
 
     def __init__(self, minsize='500MB'):
-        self.ensure_valid_is_valid(minsize)
+        self.validate_value_format(minsize)
         self.minsize: str = minsize
 
     def validate(self, value):
-        self.ensure_valid_is_valid(value)
-        self.validate_size(value)
+        self.validate_value_format(value)
+        self.validate_memory_size(value)
 
     @staticmethod
-    def ensure_valid_is_valid(value):
+    def validate_value_format(value):
         if not isinstance(value, str):
             raise TypeError(f'Expected a string for memory size, got {value!r}')
         if not re.match(r'[1-9][0-9]*[m|M|g|G]+[b|B]?', value):
             raise ValueError(f'Invalid memory size {value}, expected <size>[m|M|g|G][b|B] (e.g. 500MB)')
 
-    def validate_size(self, value):
+    def validate_memory_size(self, value):
         value_size, value_unit = MemorySize.parse_value(value)
         min_size, min_unit = MemorySize.parse_value(self.minsize)
         if value_size < min_size:
