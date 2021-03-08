@@ -52,7 +52,7 @@ class TestPortNumber(TestCase):
     def test_invalid_port_number_str(self):
         number = ''
         validator = PortNumber()
-        with pytest.raises(TypeError):
+        with pytest.raises(ValueError):
             validator.validate(number)
 
     def test_invalid_port_number_reserved(self):

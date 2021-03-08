@@ -101,6 +101,19 @@ class MemorySize(Validator):
 class PortNumber(Validator):
 
     def validate(self, value):
+        if not isinstance(value, (int, str)):
+            raise TypeError('Expected an int or str, e.g. 8080, "8080/tcp"')
+        if isinstance(value, int):
+            PortNumber.validate_port_number(value)
+        if isinstance(value, str):
+            parts = value.split('/')
+            if len(parts) > 1 and parts[1] not in ['udp', 'tcp']:
+                raise ValueError(f'Invalid protocol for port {value}')
+            port_number = int(parts[0])
+            PortNumber.validate_port_number(port_number)
+
+    @staticmethod
+    def validate_port_number(value: int):
         number_validator = Number(1024, 65535)
         number_validator.validate(value)
 
