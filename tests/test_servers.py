@@ -30,4 +30,4 @@ class TestMinecraft(TestCase):
 class TestTeamSpeak(TestCase):
 
     def test_init(self):
-        ts = TeamSpeak('name')
+        ts = TeamSpeak('name', '/tmp/tsdata')

@@ -8,25 +8,26 @@ from volumes import DockerVolume
 
 class Server(ABC):
     name = String()
+    data_dir = Directory()
     ports: List[PortMapping]
 
-    def __init__(self, name):
+    def __init__(self, name, data_dir):
         self.name: str = name
+        self.data_dir: str = data_dir
         super().__init__()
 
 
 class TeamSpeak(Server):
 
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self, name: str, data_dir: str):
+        super().__init__(name, data_dir)
 
 
 class Minecraft(Server):
     memory = MemorySize('500MB')  # e.g. 500MB, 16GB, etc.
-    data_dir = Directory()
 
-    def __init__(self, name, memory, data_dir: str, online_mode=False):
+    def __init__(self, name: str, memory: str, data_dir: str, online_mode=False):
         self.memory = memory
         self.online_mode: bool = online_mode
         self.volume = DockerVolume(data_dir, '/data', 'bind')
-        super().__init__(name)
+        super().__init__(name, data_dir)
