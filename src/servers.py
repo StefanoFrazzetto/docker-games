@@ -1,8 +1,8 @@
 from abc import ABC
 from typing import List
 
-from validators import String, MemorySize, Directory, DockerImage, PortNumber
-from volumes import DockerVolume
+from .validators import String, MemorySize, Directory, DockerImage, PortNumber
+from .volumes import DockerVolume
 
 
 class PortMapping(object):

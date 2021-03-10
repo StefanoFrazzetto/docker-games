@@ -4,7 +4,7 @@ import re
 from abc import ABC, abstractmethod
 from typing import Tuple
 
-from src.exceptions import MemorySizeError
+from .exceptions import MemorySizeError
 
 
 class Validator(ABC):

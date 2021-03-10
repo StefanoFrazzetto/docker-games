@@ -1,7 +1,7 @@
 import docker
 from docker.errors import DockerException
 
-from servers import Minecraft
+from .servers import Minecraft
 
 
 class Docker:

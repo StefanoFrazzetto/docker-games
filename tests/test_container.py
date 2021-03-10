@@ -2,7 +2,7 @@ from unittest import TestCase
 
 import pytest
 
-from container import Docker
+from src.container import Docker
 from src.servers import Minecraft
 
 

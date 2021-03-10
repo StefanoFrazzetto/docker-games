@@ -1,4 +1,4 @@
-from validators import Directory, OneOf
+from .validators import Directory, OneOf
 
 
 class Volume(object):
