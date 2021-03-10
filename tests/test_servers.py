@@ -11,15 +11,17 @@ data_dir = '/tmp/mcdata'
 
 
 class TestMinecraft(TestCase):
-
+    @pytest.mark.slow
     def test_init_valid_values(self):
         mc = Minecraft('name', '1g', 'data_dir')
         self.assertIsNotNone(mc)
 
+    @pytest.mark.slow
     def test_init_memory_size_valid_but_too_low(self):
         with pytest.raises(MemorySizeError):
             mc = Minecraft('name', '10MB', '/data_dir')
 
+    @pytest.mark.slow
     def test_init_memory_size_invalid_and_too_low(self):
         with pytest.raises(ValueError):
             mc = Minecraft('name', '0GB', '/data_dir')

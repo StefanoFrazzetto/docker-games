@@ -1,5 +1,7 @@
 from unittest import TestCase
 
+import pytest
+
 from container import Docker
 from src.servers import Minecraft
 
@@ -24,7 +26,7 @@ def make_minecraft_server():
 
 
 class TestMinecraft(TestCase):
-
+    @pytest.mark.slow
     def test_run_server(self):
         suppress_resource_warning()
         docker = Docker()
@@ -33,6 +35,7 @@ class TestMinecraft(TestCase):
         self.assertEqual('created', container.status)
         kill_and_remove_container(container)
 
+    @pytest.mark.slow
     def test_run_container_raw(self):
         import docker
         client = docker.from_env()
