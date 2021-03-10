@@ -25,10 +25,6 @@ def make_minecraft_server():
 
 class TestMinecraft(TestCase):
 
-    def test_create_server(self):
-        mc = Minecraft('name', '1GB', '/tmp/mcdata')
-        self.assertIsNotNone(mc)
-
     def test_run_server(self):
         suppress_resource_warning()
         docker = Docker()
