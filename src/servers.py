@@ -1,27 +1,49 @@
 from abc import ABC
 from typing import List
 
-from network import PortMapping
-from validators import String, MemorySize, Directory, DockerImage
+from validators import String, MemorySize, Directory, DockerImage, PortNumber
 from volumes import DockerVolume
+
+
+class PortMapping(object):
+    source_port = PortNumber()
+    destination_port = PortNumber()
+
+    def __init__(self, source, dest):
+        self.source_port = source
+        self.destination_port = dest
+
+    def __repr__(self) -> str:
+        return f'{self.__class__.__qualname__}, {self}'
+
+    def __str__(self) -> str:
+        return f'{self.source_port}:{self.destination_port}'
+
+    @staticmethod
+    def list_to_dict(values: List['PortMapping']):
+        return {port.source_port: port.destination_port for port in values}
 
 
 class Server(ABC):
     name = String()
     image_name = DockerImage()
     data_dir = Directory()
-    ports: List[PortMapping]
+    ports: List[PortMapping] = []
 
-    def __init__(self, name, data_dir):
+    def __init__(self, name, data_dir, target_dir):
         self.name: str = name
-        self.data_dir: str = data_dir
+        self.volume = DockerVolume(data_dir, target_dir, 'bind')
         super().__init__()
+
+    def add_ports(self, source, dest):
+        port_mapping = PortMapping(source, dest)
+        self.ports.append(port_mapping)
 
 
 class TeamSpeak(Server):
 
     def __init__(self, name: str, data_dir: str):
-        super().__init__(name, data_dir)
+        super().__init__(name, data_dir, '/tmp/tsdata')
 
 
 class Minecraft(Server):

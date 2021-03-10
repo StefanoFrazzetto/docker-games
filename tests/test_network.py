@@ -2,7 +2,7 @@ from unittest import TestCase
 
 import pytest
 
-from network import PortMapping
+from servers import PortMapping
 
 
 class TestPortMapping(TestCase):
