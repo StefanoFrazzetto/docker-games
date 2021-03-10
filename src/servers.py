@@ -53,5 +53,19 @@ class Minecraft(Server):
         self.image_name = 'itzg/minecraft-server'
         self.memory = memory
         self.online_mode: bool = online_mode
-        self.volume = DockerVolume(data_dir, '/data', 'bind')
-        super().__init__(name, data_dir)
+        super().__init__(name, data_dir, '/data')
+
+    def docker_parameters(self) -> dict:
+        return {
+            'name': self.name,
+            'volumes': {
+                self.volume.source: {
+                    self.volume.volume_type: self.volume.target, 'mode': 'rw'
+                },
+            },
+            'ports': PortMapping.list_to_dict(self.ports),
+            'environment': {
+                'EULA': 'TRUE',
+                'ONLINE_MODE': 'TRUE',
+            }
+        }
