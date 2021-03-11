@@ -33,6 +33,7 @@ class Server(ABC):
         self.name: str = name
         self.volume: DockerVolume = DockerVolume(data_dir, target_dir, 'bind')
         self.ports: List[PortMapping] = []
+        self.environment: dict = {}
         super().__init__()
 
     def add_ports(self, source, dest):
@@ -48,6 +49,7 @@ class Server(ABC):
                 },
             },
             'ports': PortMapping.list_to_dict(self.ports),
+            'environment': self.environment
         }
 
 
@@ -56,15 +58,7 @@ class TeamSpeak(Server):
     def __init__(self, name: str, data_dir: str):
         self.image_name = 'teamspeak'
         super().__init__(name, data_dir, '/var/ts3server')
-
-    def docker_parameters(self) -> dict:
-        params = super().docker_parameters()
-        params.update({
-            'environment': {
-                'TS3SERVER_LICENSE': 'accept'
-            }
-        })
-        return params
+        self.environment['TS3SERVER_LICENSE'] = 'accept'
 
 
 class Minecraft(Server):
@@ -75,13 +69,5 @@ class Minecraft(Server):
         self.memory = memory
         self.online_mode: bool = online_mode
         super().__init__(name, data_dir, '/data')
-
-    def docker_parameters(self) -> dict:
-        params = super().docker_parameters()
-        params.update({
-            'environment': {
-                'EULA': 'TRUE',
-                'ONLINE_MODE': 'TRUE',
-            }
-        })
-        return params
+        self.environment['EULA'] = 'TRUE'
+        self.environment['ONLINE_MODE'] = 'TRUE'
