@@ -75,8 +75,9 @@ class Minecraft(Server):
     def __init__(self, name: str, memory: str, data_dir: str, online_mode=False):
         self.image_name = 'itzg/minecraft-server'
         self.memory = memory
-        self.online_mode: bool = online_mode
         super().__init__(name, data_dir, '/data')
+        if online_mode:
+            self.online_mode()
 
     def accept_license(self) -> None:
         print("You agreed to Minecraft End User License Agreement and Privacy Policy:")
