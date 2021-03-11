@@ -112,7 +112,7 @@ class Factorio(Server):
         # game server runs as 'factorio' user with user id 845
         if self.volume.source_dir_owner_id != 845 or self.volume.source_dir_group_id != 845:
             e = f'Did you forget to set the owner of the data directory?'
-            e += f'\nchown 845:845 {self.volume.source}'
+            e += f'\nsudo chown 845:845 {self.volume.source}'
             raise PermissionError(e)
 
     def accept_license(self) -> None:
