@@ -39,6 +39,17 @@ class Server(ABC):
         port_mapping = PortMapping(source, dest)
         self.ports.append(port_mapping)
 
+    def docker_parameters(self) -> dict:
+        return {
+            'name': self.name,
+            'volumes': {
+                self.volume.source: {
+                    self.volume.volume_type: self.volume.target, 'mode': 'rw'
+                },
+            },
+            'ports': PortMapping.list_to_dict(self.ports),
+        }
+
 
 class TeamSpeak(Server):
 
@@ -56,16 +67,11 @@ class Minecraft(Server):
         super().__init__(name, data_dir, '/data')
 
     def docker_parameters(self) -> dict:
-        return {
-            'name': self.name,
-            'volumes': {
-                self.volume.source: {
-                    self.volume.volume_type: self.volume.target, 'mode': 'rw'
-                },
-            },
-            'ports': PortMapping.list_to_dict(self.ports),
+        params = super().docker_parameters()
+        params.update({
             'environment': {
                 'EULA': 'TRUE',
                 'ONLINE_MODE': 'TRUE',
             }
-        }
+        })
+        return params
