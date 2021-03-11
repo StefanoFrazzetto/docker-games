@@ -37,6 +37,7 @@ class TestMinecraft(TestCase):
     def test_docker_parameters(self):
         minecraft = Minecraft(self.name, self.mem_size, self.data_dir)
         minecraft.add_ports(25565, 25565)
+        minecraft.accept_license()
         expected = {
             'name': minecraft.name,
             'volumes': {'/tmp/mcdata': {'bind': '/data', 'mode': 'rw'}},
@@ -67,6 +68,7 @@ class TestTeamSpeak(TestCase):
         ts.add_ports(9987, '9987/udp')
         ts.add_ports(10011, 10011)
         ts.add_ports(30033, 30033)
+        ts.accept_license()
         expected = {
             'name': self.name,
             'volumes': {self.data_dir: {'bind': '/var/ts3server', 'mode': 'rw'}},

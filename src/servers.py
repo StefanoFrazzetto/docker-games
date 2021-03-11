@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import List
 
 from .validators import String, MemorySize, Directory, DockerImage, PortNumber
@@ -36,7 +36,11 @@ class Server(ABC):
         self.environment: dict = {}
         super().__init__()
 
-    def add_ports(self, source, dest):
+    @abstractmethod
+    def accept_license(self) -> None:
+        raise NotImplementedError
+
+    def add_ports(self, source, dest) -> None:
         port_mapping = PortMapping(source, dest)
         self.ports.append(port_mapping)
 
@@ -58,6 +62,10 @@ class TeamSpeak(Server):
     def __init__(self, name: str, data_dir: str):
         self.image_name = 'teamspeak'
         super().__init__(name, data_dir, '/var/ts3server')
+
+    def accept_license(self) -> None:
+        print("You accepted TeamSpeak 3 server license agreement:")
+        print("https://teamspeak.com/en/features/licensing/")
         self.environment['TS3SERVER_LICENSE'] = 'accept'
 
 
@@ -69,5 +77,10 @@ class Minecraft(Server):
         self.memory = memory
         self.online_mode: bool = online_mode
         super().__init__(name, data_dir, '/data')
-        self.environment['EULA'] = 'TRUE'
         self.environment['ONLINE_MODE'] = 'TRUE'
+
+    def accept_license(self) -> None:
+        print("You agreed to Minecraft End User License Agreement and Privacy Policy:")
+        print("https://account.mojang.com/documents/minecraft_eula")
+        print("https://privacy.microsoft.com/en-gb/privacystatement")
+        self.environment['EULA'] = 'TRUE'
