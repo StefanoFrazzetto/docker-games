@@ -11,6 +11,8 @@ class DockerVolume:
         self.source = source
         self.target: str = target
         self.volume_type = volume_type
+        if not os.path.exists(self.source):
+            os.makedirs(self.source)
 
     def __repr__(self):
         return f'{self.__class__.__qualname__} ({self.volume_type}): {self.source} -> {self.target}'
