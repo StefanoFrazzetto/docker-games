@@ -5,7 +5,7 @@ from .validators import String, MemorySize, Directory, DockerImage, PortNumber
 from .volumes import DockerVolume
 
 
-class PortMapping(object):
+class ServerPort(object):
     source_port = PortNumber()
     destination_port = PortNumber()
 
@@ -32,7 +32,7 @@ class PortMapping(object):
         return f'{self.source_port}:{self.destination_port}'
 
     @staticmethod
-    def list_to_dict(values: List['PortMapping']):
+    def list_to_dict(values: List['ServerPort']):
         return {port.source_port: port.destination_port for port in values}
 
 
@@ -44,7 +44,7 @@ class Server(ABC):
     def __init__(self, name, data_dir, target_dir):
         self.name: str = name
         self.volume: DockerVolume = DockerVolume(data_dir, target_dir, 'bind')
-        self.ports: List[PortMapping] = []
+        self.ports: List[ServerPort] = []
         self.environment: dict = {}
         super().__init__()
 
@@ -53,7 +53,7 @@ class Server(ABC):
         raise NotImplementedError
 
     def add_ports(self, source, dest) -> None:
-        port_mapping = PortMapping(source, dest)
+        port_mapping = ServerPort(source, dest)
         self.ports.append(port_mapping)
 
     def docker_parameters(self) -> dict:
@@ -64,7 +64,7 @@ class Server(ABC):
                     self.volume.volume_type: self.volume.target, 'mode': 'rw'
                 },
             },
-            'ports': PortMapping.list_to_dict(self.ports),
+            'ports': ServerPort.list_to_dict(self.ports),
             'environment': self.environment
         }
 
