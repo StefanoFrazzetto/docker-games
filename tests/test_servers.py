@@ -5,12 +5,15 @@ import pytest
 from src.exceptions import MemorySizeError
 from src.servers import Minecraft, TeamSpeak
 
-name = 'mcserver'
-mem_size = '512MB'
-data_dir = '/tmp/mcdata'
-
 
 class TestMinecraft(TestCase):
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.name = 'mcserver'
+        cls.mem_size = '512MB'
+        cls.data_dir = '/tmp/mcdata'
+
     @pytest.mark.slow
     def test_init_valid_values(self):
         mc = Minecraft('name', '1g', 'data_dir')
@@ -27,12 +30,12 @@ class TestMinecraft(TestCase):
             mc = Minecraft('name', '0GB', '/data_dir')
 
     def test_end_to_end_valid(self):
-        minecraft = Minecraft(name, mem_size, data_dir)
-        volume = {data_dir: {'bind': '/data'}}
+        minecraft = Minecraft(self.name, self.mem_size, self.data_dir)
+        volume = {self.data_dir: {'bind': '/data'}}
         self.assertEqual(volume, minecraft.volume.dict())
 
     def test_docker_parameters(self):
-        minecraft = Minecraft(name, mem_size, data_dir)
+        minecraft = Minecraft(self.name, self.mem_size, self.data_dir)
         minecraft.add_ports(25565, 25565)
         expected = {
             'name': minecraft.name,
