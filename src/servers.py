@@ -28,11 +28,11 @@ class Server(ABC):
     name = String()
     image_name = DockerImage()
     data_dir = Directory()
-    ports: List[PortMapping] = []
 
     def __init__(self, name, data_dir, target_dir):
         self.name: str = name
-        self.volume = DockerVolume(data_dir, target_dir, 'bind')
+        self.volume: DockerVolume = DockerVolume(data_dir, target_dir, 'bind')
+        self.ports: List[PortMapping] = []
         super().__init__()
 
     def add_ports(self, source, dest):
