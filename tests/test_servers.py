@@ -69,7 +69,7 @@ class TestTeamSpeak(TestCase):
         ts.add_ports(30033, 30033)
         expected = {
             'name': self.name,
-            'volumes': {self.data_dir: {'bind': '/var/ts3server/', 'mode': 'rw'}},
+            'volumes': {self.data_dir: {'bind': '/var/ts3server', 'mode': 'rw'}},
             'ports': {9987: '9987/udp', 10011: 10011, 30033: 30033},
             'environment': {
                 'TS3SERVER_LICENSE': 'accept'

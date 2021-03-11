@@ -3,7 +3,7 @@ from unittest import TestCase
 import pytest
 
 from src.container import Docker
-from src.servers import Minecraft
+from src.servers import Minecraft, TeamSpeak
 
 
 def kill_and_remove_container(container):
@@ -17,17 +17,21 @@ def make_minecraft_server():
     return minecraft
 
 
-class TestMinecraft(TestCase):
-    @pytest.mark.slow
-    def test_run_server(self):
-        docker = Docker()
-        minecraft = make_minecraft_server()
-        container = docker.run(minecraft)
-        self.assertEqual('created', container.status)
-        kill_and_remove_container(container)
+def make_teamspeak_server():
+    server = TeamSpeak('tsserver', '/tmp/tsserver')
+    server.add_ports(9987, '9987/udp')
+    server.add_ports(10011, 10011)
+    server.add_ports(30033, 30033)
+    return server
 
-    @pytest.mark.slow
-    def test_run_container_raw(self):
+
+@pytest.mark.slow
+class TestServers(TestCase):
+
+    def setUp(self) -> None:
+        self.docker = Docker()
+
+    def test_run_minecraft_simple(self):
         import docker
         client = docker.from_env()
         container = client.containers.run(
@@ -35,5 +39,17 @@ class TestMinecraft(TestCase):
             detach=True,
             environment={'EULA': 'TRUE'}
         )
+        self.assertEqual('created', container.status)
+        kill_and_remove_container(container)
+
+    def test_run_minecraft(self):
+        minecraft = make_minecraft_server()
+        container = self.docker.run(minecraft)
+        self.assertEqual('created', container.status)
+        kill_and_remove_container(container)
+
+    def test_run_teamspeak(self):
+        teamspeak = make_teamspeak_server()
+        container = self.docker.run(teamspeak)
         self.assertEqual('created', container.status)
         kill_and_remove_container(container)
