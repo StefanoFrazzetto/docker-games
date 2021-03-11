@@ -3,7 +3,7 @@ from unittest import TestCase
 import pytest
 
 from src.container import Docker
-from src.servers import Minecraft, TeamSpeak
+from src.servers import Minecraft, TeamSpeak, Factorio
 
 
 def kill_and_remove_container(container):
@@ -22,6 +22,13 @@ def make_teamspeak_server():
     server.add_ports(9987, '9987/udp')
     server.add_ports(10011, 10011)
     server.add_ports(30033, 30033)
+    return server
+
+
+def make_factorio_server():
+    server = Factorio('factorio_tests', '/tmp/factorio_tests')
+    server.add_ports(34197, '34197/udp')
+    server.add_ports(27015, '27015/tcp')
     return server
 
 
@@ -49,6 +56,12 @@ class TestServers(TestCase):
         kill_and_remove_container(container)
 
     def test_run_teamspeak(self):
+        teamspeak = make_teamspeak_server()
+        container = self.docker.run(teamspeak)
+        self.assertEqual('created', container.status)
+        kill_and_remove_container(container)
+
+    def test_run_factorio(self):
         teamspeak = make_teamspeak_server()
         container = self.docker.run(teamspeak)
         self.assertEqual('created', container.status)

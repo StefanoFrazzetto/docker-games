@@ -3,7 +3,7 @@ from unittest import TestCase
 import pytest
 
 from src.exceptions import MemorySizeError
-from src.servers import Minecraft, TeamSpeak
+from src.servers import Minecraft, TeamSpeak, Factorio
 
 
 class TestMinecraft(TestCase):
@@ -79,3 +79,29 @@ class TestTeamSpeak(TestCase):
             }
         }
         self.assertDictEqual(expected, ts.docker_parameters())
+
+
+@pytest.mark.slow
+class TestFactorio(TestCase):
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.name = 'factorio_tests'
+        cls.data_dir = '/tmp/factorio_tests'
+
+    def test_init(self):
+        server = Factorio(self.name, self.data_dir)
+        self.assertEqual(self.name, server.name)
+        self.assertEqual(self.data_dir, server.volume.source)
+
+    def test_docker_parameters(self):
+        server = Factorio(self.name, self.data_dir)
+        server.add_ports(34197, '34197/udp')
+        server.add_ports(27015, '27015/tcp')
+        expected = {
+            'name': self.name,
+            'volumes': {self.data_dir: {'bind': '/factorio', 'mode': 'rw'}},
+            'ports': {34197: '34197/udp', 27015: '27015/tcp'},
+            'environment': {}
+        }
+        self.assertDictEqual(expected, server.docker_parameters())

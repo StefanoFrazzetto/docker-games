@@ -87,3 +87,13 @@ class Minecraft(Server):
 
     def online_mode(self) -> None:
         self.environment['ONLINE_MODE'] = 'TRUE'
+
+
+class Factorio(Server):
+
+    def __init__(self, name: str, data_dir: str):
+        self.image_name = 'factoriotools/factorio'
+        super().__init__(name, data_dir, '/factorio')
+
+    def accept_license(self) -> None:
+        pass
