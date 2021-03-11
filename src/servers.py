@@ -9,9 +9,21 @@ class PortMapping(object):
     source_port = PortNumber()
     destination_port = PortNumber()
 
-    def __init__(self, source, dest):
-        self.source_port = source
-        self.destination_port = dest
+    def __init__(self, *ports):
+        parsed_ports = self._parse_ports(*ports)
+        self.source_port = parsed_ports[0]
+        self.destination_port = parsed_ports[1]
+
+    @staticmethod
+    def _parse_ports(*ports):
+        if len(ports) == 1 and isinstance(ports[0], str):
+            return ports[0].split(':')
+        if len(ports) == 2:
+            return ports
+
+        e = f'Wrong ports format {ports}, expected:'
+        e += f'\n(source:destination) or (source, destination)'
+        raise ValueError()
 
     def __repr__(self) -> str:
         return f'{self.__class__.__qualname__}, {self}'

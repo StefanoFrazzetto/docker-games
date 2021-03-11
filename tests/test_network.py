@@ -13,6 +13,16 @@ class TestPortMapping(TestCase):
         mapping = PortMapping(source, dest)
         self.assertEqual(f'{source}:{dest}', str(mapping))
 
+    def test_valid_mapping_as_string(self):
+        ports = '4242:6969'
+        mapping = PortMapping(ports)
+        self.assertEqual(f'{ports}', str(mapping))
+
+    def test_valid_mapping_as_string_with_protocol(self):
+        ports = '4242/tcp:6969'
+        mapping = PortMapping(ports)
+        self.assertEqual(f'{ports}', str(mapping))
+
     def test_valid_mapping_source_with_protocol(self):
         source = '4242/udp'
         dest = 6969
