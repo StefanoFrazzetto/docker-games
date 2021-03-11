@@ -77,10 +77,12 @@ class Minecraft(Server):
         self.memory = memory
         self.online_mode: bool = online_mode
         super().__init__(name, data_dir, '/data')
-        self.environment['ONLINE_MODE'] = 'TRUE'
 
     def accept_license(self) -> None:
         print("You agreed to Minecraft End User License Agreement and Privacy Policy:")
         print("https://account.mojang.com/documents/minecraft_eula")
         print("https://privacy.microsoft.com/en-gb/privacystatement")
         self.environment['EULA'] = 'TRUE'
+
+    def online_mode(self) -> None:
+        self.environment['ONLINE_MODE'] = 'TRUE'

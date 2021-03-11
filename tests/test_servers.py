@@ -38,6 +38,7 @@ class TestMinecraft(TestCase):
         minecraft = Minecraft(self.name, self.mem_size, self.data_dir)
         minecraft.add_ports(25565, 25565)
         minecraft.accept_license()
+        minecraft.online_mode()
         expected = {
             'name': minecraft.name,
             'volumes': {'/tmp/mcdata': {'bind': '/data', 'mode': 'rw'}},
