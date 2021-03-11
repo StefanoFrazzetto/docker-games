@@ -145,7 +145,7 @@ class DockerImage(Validator):
             raise ValueError(f'Could not find Docker image "{value}"')
 
     @staticmethod
-    def get_images(name: str, tag_or_digest: str = None):
+    def get_images(name: str):
         from src.container import Docker
         docker = Docker()
         # docker search does not find images when repository is specified
