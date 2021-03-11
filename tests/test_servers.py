@@ -1,4 +1,5 @@
 from unittest import TestCase
+from unittest import mock
 
 import pytest
 
@@ -81,6 +82,10 @@ class TestTeamSpeak(TestCase):
         self.assertDictEqual(expected, ts.docker_parameters())
 
 
+def ensure_data_dir_owner():
+    pass
+
+
 @pytest.mark.slow
 class TestFactorio(TestCase):
 
@@ -89,12 +94,14 @@ class TestFactorio(TestCase):
         cls.name = 'factorio_tests'
         cls.data_dir = '/tmp/factorio_tests'
 
-    def test_init(self):
+    @mock.patch('src.servers.Factorio._ensure_data_dir_owner', side_effect=ensure_data_dir_owner)
+    def test_init(self, _):
         server = Factorio(self.name, self.data_dir)
         self.assertEqual(self.name, server.name)
         self.assertEqual(self.data_dir, server.volume.source)
 
-    def test_docker_parameters(self):
+    @mock.patch('src.servers.Factorio._ensure_data_dir_owner', side_effect=ensure_data_dir_owner)
+    def test_docker_parameters(self, _):
         server = Factorio(self.name, self.data_dir)
         server.add_ports(34197, '34197/udp')
         server.add_ports(27015, '27015/tcp')

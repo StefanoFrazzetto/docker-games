@@ -1,3 +1,5 @@
+import os
+
 from .validators import Directory, OneOf
 
 
@@ -12,6 +14,14 @@ class DockerVolume:
 
     def __repr__(self):
         return f'{self.__class__.__qualname__} ({self.volume_type}): {self.source} -> {self.target}'
+
+    @property
+    def source_dir_owner_id(self):
+        return os.stat(self.source).st_uid
+
+    @property
+    def source_dir_group_id(self):
+        return os.stat(self.source).st_gid
 
     def dict(self) -> dict:
         return {

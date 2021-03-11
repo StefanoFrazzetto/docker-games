@@ -94,6 +94,15 @@ class Factorio(Server):
     def __init__(self, name: str, data_dir: str):
         self.image_name = 'factoriotools/factorio'
         super().__init__(name, data_dir, '/factorio')
+        self._ensure_data_dir_owner()
+
+    def _ensure_data_dir_owner(self):
+        # game server runs as 'factorio' user with user id 845
+        if self.volume.source_dir_owner_id != 845 or self.volume.source_dir_group_id:
+            e = f'Did you forget to set the owner of the data directory?'
+            e += f'\nchown 845:845 {self.volume.source}'
+            raise PermissionError(e)
+
 
     def accept_license(self) -> None:
         pass
