@@ -6,7 +6,7 @@ from src.exceptions import MemorySizeError
 from src.servers import Minecraft, TeamSpeak
 
 name = 'mcserver'
-mem_size = '500MB'
+mem_size = '512MB'
 data_dir = '/tmp/mcdata'
 
 

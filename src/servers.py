@@ -47,7 +47,7 @@ class TeamSpeak(Server):
 
 
 class Minecraft(Server):
-    memory = MemorySize('500MB')  # e.g. 500MB, 16GB, etc.
+    memory = MemorySize('512MB')  # e.g. 500MB, 16GB, etc.
 
     def __init__(self, name: str, memory: str, data_dir: str, online_mode=False):
         self.image_name = 'itzg/minecraft-server'
