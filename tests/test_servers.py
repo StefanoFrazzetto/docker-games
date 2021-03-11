@@ -32,7 +32,7 @@ class TestMinecraft(TestCase):
     def test_end_to_end_valid(self):
         minecraft = Minecraft(self.name, self.mem_size, self.data_dir)
         volume = {self.data_dir: {'bind': '/data'}}
-        self.assertEqual(volume, minecraft.volume.dict())
+        self.assertDictEqual(volume, minecraft.volume.dict())
 
     def test_docker_parameters(self):
         minecraft = Minecraft(self.name, self.mem_size, self.data_dir)
@@ -46,7 +46,7 @@ class TestMinecraft(TestCase):
                 'EULA': 'TRUE'
             }
         }
-        self.assertEqual(expected, minecraft.docker_parameters())
+        self.assertDictEqual(expected, minecraft.docker_parameters())
 
 
 @pytest.mark.slow

@@ -39,4 +39,4 @@ class TestPortMapping(TestCase):
 
         result = PortMapping.list_to_dict(ports)
         expected = {3500: 4040, '8081/tcp': 8080}
-        self.assertEqual(expected, result)
+        self.assertDictEqual(expected, result)
