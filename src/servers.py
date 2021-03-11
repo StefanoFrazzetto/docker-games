@@ -54,7 +54,17 @@ class Server(ABC):
 class TeamSpeak(Server):
 
     def __init__(self, name: str, data_dir: str):
-        super().__init__(name, data_dir, '/tmp/tsdata')
+        self.image_name = 'teamspeak'
+        super().__init__(name, data_dir, '/var/ts3server')
+
+    def docker_parameters(self) -> dict:
+        params = super().docker_parameters()
+        params.update({
+            'environment': {
+                'TS3SERVER_LICENSE': 'accept'
+            }
+        })
+        return params
 
 
 class Minecraft(Server):

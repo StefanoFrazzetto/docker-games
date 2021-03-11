@@ -52,5 +52,27 @@ class TestMinecraft(TestCase):
 @pytest.mark.slow
 class TestTeamSpeak(TestCase):
 
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.name = 'tsserver'
+        cls.data_dir = '/tmp/tsdata'
+
     def test_init(self):
-        ts = TeamSpeak('name', '/tmp/tsdata')
+        ts = TeamSpeak(self.name, self.data_dir)
+        self.assertEqual(self.name, ts.name)
+        self.assertEqual(self.data_dir, ts.volume.source)
+
+    def test_docker_parameters(self):
+        ts = TeamSpeak(self.name, self.data_dir)
+        ts.add_ports(9987, '9987/udp')
+        ts.add_ports(10011, 10011)
+        ts.add_ports(30033, 30033)
+        expected = {
+            'name': self.name,
+            'volumes': {self.data_dir: {'bind': '/var/ts3server/', 'mode': 'rw'}},
+            'ports': {9987: '9987/udp', 10011: 10011, 30033: 30033},
+            'environment': {
+                'TS3SERVER_LICENSE': 'accept'
+            }
+        }
+        self.assertDictEqual(expected, ts.docker_parameters())
