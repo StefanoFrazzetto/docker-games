@@ -12,7 +12,7 @@ class Docker:
             client = docker.from_env()
             return client
         except DockerException as e:
-            raise RuntimeError('Please ensure Docker is running on your system.') from e
+            raise RuntimeError('Please ensure Docker is running on your system.') from e.__class__(e)
 
     def run(self, server: Server):
         return self.client.containers.run(
