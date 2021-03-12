@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, mock
 
 import pytest
 
@@ -32,6 +32,10 @@ def make_factorio_server():
     return server
 
 
+def ensure_data_dir_owner():
+    pass
+
+
 @pytest.mark.slow
 class TestServers(TestCase):
 
@@ -61,7 +65,8 @@ class TestServers(TestCase):
         self.assertEqual('created', container.status)
         kill_and_remove_container(container)
 
-    def test_run_factorio(self):
+    @mock.patch('src.servers.Factorio._ensure_data_dir_owner', side_effect=ensure_data_dir_owner)
+    def test_run_factorio(self, _):
         factorio = make_factorio_server()
         container = factorio.start()
         self.assertEqual('created', container.status)
