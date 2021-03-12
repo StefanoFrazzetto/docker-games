@@ -1,9 +1,12 @@
+import logging
 from abc import ABC, abstractmethod
 from typing import List
 
 from .network import ServerPort
 from .validators import String, MemorySize, Directory, DockerImage
 from .volumes import DockerVolume
+
+logger = logging.getLogger(__name__)
 
 
 class Server(ABC):
@@ -46,8 +49,8 @@ class TeamSpeak(Server):
         super().__init__(name, data_dir, '/var/ts3server')
 
     def accept_license(self) -> None:
-        print("You accepted TeamSpeak 3 server license agreement:")
-        print("https://teamspeak.com/en/features/licensing/")
+        logger.info("You accepted TeamSpeak 3 server license agreement:")
+        logger.info("https://teamspeak.com/en/features/licensing/")
         self.environment['TS3SERVER_LICENSE'] = 'accept'
 
 
@@ -62,9 +65,9 @@ class Minecraft(Server):
             self.online_mode()
 
     def accept_license(self) -> None:
-        print("You agreed to Minecraft End User License Agreement and Privacy Policy:")
-        print("https://account.mojang.com/documents/minecraft_eula")
-        print("https://privacy.microsoft.com/en-gb/privacystatement")
+        logger.info("You agreed to Minecraft End User License Agreement and Privacy Policy:")
+        logger.info("https://account.mojang.com/documents/minecraft_eula")
+        logger.info("https://privacy.microsoft.com/en-gb/privacystatement")
         self.environment['EULA'] = 'TRUE'
 
     def online_mode(self) -> None:
