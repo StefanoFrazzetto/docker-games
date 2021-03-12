@@ -1,7 +1,10 @@
 import logging
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Union
 
+from docker.models.containers import ContainerCollection, Container
+
+from .client import Docker
 from .network import ServerPort
 from .validators import String, MemorySize, Directory, DockerImage
 from .volumes import DockerVolume
@@ -29,7 +32,15 @@ class Server(ABC):
         port_mapping = ServerPort(source, dest)
         self.ports.append(port_mapping)
 
-    def docker_parameters(self) -> dict:
+
+class DockerServer(Server, ABC):
+    docker_client: Docker = Docker()
+
+    def __init__(self, name, data_dir, target_dir, *args, **kwargs):
+        super().__init__(name, data_dir, target_dir)
+
+    @property
+    def parameters(self) -> dict:
         return {
             'name': self.name,
             'volumes': {
@@ -41,8 +52,15 @@ class Server(ABC):
             'environment': self.environment
         }
 
+    def start(self, detach: bool = True, **kwargs) -> Union[ContainerCollection, Container]:
+        return self.docker_client.run(
+            self.image_name,
+            detach=detach,
+            **{**self.parameters, **kwargs}
+        )
 
-class TeamSpeak(Server):
+
+class TeamSpeak(DockerServer):
 
     def __init__(self, name: str, data_dir: str):
         self.image_name = 'teamspeak'
@@ -54,7 +72,7 @@ class TeamSpeak(Server):
         self.environment['TS3SERVER_LICENSE'] = 'accept'
 
 
-class Minecraft(Server):
+class Minecraft(DockerServer):
     memory = MemorySize('512MB')  # e.g. 500MB, 16GB, etc.
 
     def __init__(self, name: str, memory: str, data_dir: str, online_mode=False):
@@ -74,7 +92,7 @@ class Minecraft(Server):
         self.environment['ONLINE_MODE'] = 'TRUE'
 
 
-class Factorio(Server):
+class Factorio(DockerServer):
 
     def __init__(self, name: str, data_dir: str):
         self.image_name = 'factoriotools/factorio'

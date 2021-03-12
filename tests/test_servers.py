@@ -49,7 +49,7 @@ class TestMinecraft(TestCase):
                 'EULA': 'TRUE'
             }
         }
-        self.assertDictEqual(expected, minecraft.docker_parameters())
+        self.assertDictEqual(expected, minecraft.parameters)
 
 
 @pytest.mark.slow
@@ -79,7 +79,7 @@ class TestTeamSpeak(TestCase):
                 'TS3SERVER_LICENSE': 'accept'
             }
         }
-        self.assertDictEqual(expected, ts.docker_parameters())
+        self.assertDictEqual(expected, ts.parameters)
 
 
 def ensure_data_dir_owner():
@@ -111,4 +111,4 @@ class TestFactorio(TestCase):
             'ports': {34197: '34197/udp', 27015: '27015/tcp'},
             'environment': {}
         }
-        self.assertDictEqual(expected, server.docker_parameters())
+        self.assertDictEqual(expected, server.parameters)

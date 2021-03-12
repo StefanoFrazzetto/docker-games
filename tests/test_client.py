@@ -51,18 +51,18 @@ class TestServers(TestCase):
 
     def test_run_minecraft(self):
         minecraft = make_minecraft_server()
-        container = self.docker.run(minecraft)
+        container = minecraft.start()
         self.assertEqual('created', container.status)
         kill_and_remove_container(container)
 
     def test_run_teamspeak(self):
         teamspeak = make_teamspeak_server()
-        container = self.docker.run(teamspeak)
+        container = teamspeak.start()
         self.assertEqual('created', container.status)
         kill_and_remove_container(container)
 
     def test_run_factorio(self):
-        teamspeak = make_teamspeak_server()
-        container = self.docker.run(teamspeak)
+        factorio = make_factorio_server()
+        container = factorio.start()
         self.assertEqual('created', container.status)
         kill_and_remove_container(container)

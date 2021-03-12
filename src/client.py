@@ -1,22 +1,28 @@
 import docker
+from docker.client import DockerClient
 from docker.errors import DockerException
-
-from .servers import Server
+from docker.models.containers import ContainerCollection
 
 
 class Docker:
 
-    @property
-    def client(self) -> docker.DockerClient:
+    def __init__(self):
+        self._client: DockerClient = self._init_client()
+
+    @staticmethod
+    def _init_client() -> DockerClient:
         try:
-            client = docker.from_env()
-            return client
+            return docker.from_env()
         except DockerException as e:
             raise RuntimeError('Please ensure Docker is running on your system.') from e.__class__(e)
 
-    def run(self, server: Server):
-        return self.client.containers.run(
-            server.image_name,
-            detach=True,
-            **server.docker_parameters()
-        )
+    @property
+    def client(self) -> DockerClient:
+        return self._client
+
+    @property
+    def containers(self) -> ContainerCollection:
+        return self._client.containers
+
+    def run(self, *args, **kwargs):
+        return self.containers.run(*args, **kwargs)
