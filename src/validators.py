@@ -146,7 +146,7 @@ class DockerImage(Validator):
 
     @staticmethod
     def get_images(name: str):
-        from src.container import Docker
+        from src.client import Docker
         docker = Docker()
         # docker search does not find images when repository is specified
         image_name = name.split('/')[-1]  # get last string after '/'

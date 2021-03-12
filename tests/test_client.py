@@ -2,7 +2,7 @@ from unittest import TestCase
 
 import pytest
 
-from src.container import Docker
+from src.client import Docker
 from src.servers import Minecraft, TeamSpeak, Factorio
 
 
