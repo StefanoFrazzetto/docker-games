@@ -3,14 +3,14 @@ import setuptools
 with open('README.md', 'r', encoding='utf-8') as fh:
     long_description = fh.read()
     setuptools.setup(
-        name='DockerGames',
+        name='docker-games',
         version='1.0.0-alpha1',
         author='Stefano Frazzetto',
         author_email='stefano+pypi@hey.com',
         description='Easily create game servers using Docker and Python.',
         long_description=long_description,
         long_description_content_type='text/markdown',
-        url='https://github.com/StefanoFrazzetto/AWSomeGamingServer',
+        url='https://github.com/StefanoFrazzetto/DockerGameServers',
         packages=setuptools.find_packages(),
         python_requires='>=3.6',
         classifiers=[
@@ -40,7 +40,7 @@ with open('README.md', 'r', encoding='utf-8') as fh:
             'test': ['pytest'],
         },
         project_urls={
-            'Bug Reports': 'https://github.com/StefanoFrazzetto/AWSomeGamingServer/issues',
-            'Source': 'https://github.com/StefanoFrazzetto/AWSomeGamingServer',
+            'Bug Reports': 'https://github.com/StefanoFrazzetto/DockerGameServers/issues',
+            'Source': 'https://github.com/StefanoFrazzetto/DockerGameServers',
         },
     )
