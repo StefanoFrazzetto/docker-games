@@ -2,7 +2,7 @@ from unittest import TestCase
 
 import pytest
 
-from src.network import ServerPort
+from docker_games.network import ServerPort
 
 
 class TestPortMapping(TestCase):

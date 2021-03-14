@@ -3,8 +3,8 @@ from unittest import mock
 
 import pytest
 
-from src.exceptions import MemorySizeError
-from src.servers import Minecraft, TeamSpeak, Factorio
+from docker_games.exceptions import MemorySizeError
+from docker_games.servers import Minecraft, TeamSpeak, Factorio
 
 
 class TestMinecraft(TestCase):
@@ -94,13 +94,13 @@ class TestFactorio(TestCase):
         cls.name = 'factorio_tests'
         cls.data_dir = '/tmp/factorio_tests'
 
-    @mock.patch('src.servers.Factorio._ensure_data_dir_owner', side_effect=ensure_data_dir_owner)
+    @mock.patch('docker_games.servers.Factorio._ensure_data_dir_owner', side_effect=ensure_data_dir_owner)
     def test_init(self, _):
         server = Factorio(self.name, self.data_dir)
         self.assertEqual(self.name, server.name)
         self.assertEqual(self.data_dir, server.volume.source)
 
-    @mock.patch('src.servers.Factorio._ensure_data_dir_owner', side_effect=ensure_data_dir_owner)
+    @mock.patch('docker_games.servers.Factorio._ensure_data_dir_owner', side_effect=ensure_data_dir_owner)
     def test_docker_parameters(self, _):
         server = Factorio(self.name, self.data_dir)
         server.add_ports(34197, '34197/udp')

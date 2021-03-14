@@ -3,7 +3,7 @@ from unittest import TestCase
 
 import pytest
 
-from src.validators import IPAddress, MemorySize, String, Directory, PortNumber, DockerImage
+from docker_games.validators import IPAddress, MemorySize, String, Directory, PortNumber, DockerImage
 
 
 class TestMemorySize(TestCase):

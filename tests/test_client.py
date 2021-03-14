@@ -2,8 +2,8 @@ from unittest import TestCase, mock
 
 import pytest
 
-from src.client import Docker
-from src.servers import Minecraft, TeamSpeak, Factorio
+from docker_games.client import Docker
+from docker_games.servers import Minecraft, TeamSpeak, Factorio
 
 
 def kill_and_remove_container(container):
@@ -65,7 +65,7 @@ class TestServers(TestCase):
         self.assertEqual('created', container.status)
         kill_and_remove_container(container)
 
-    @mock.patch('src.servers.Factorio._ensure_data_dir_owner', side_effect=ensure_data_dir_owner)
+    @mock.patch('docker_games.servers.Factorio._ensure_data_dir_owner', side_effect=ensure_data_dir_owner)
     def test_run_factorio(self, _):
         factorio = make_factorio_server()
         container = factorio.start()
