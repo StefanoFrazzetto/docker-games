@@ -15,7 +15,6 @@ logger = logging.getLogger(__name__)
 class Server(ABC):
     name = String()
     image_name = DockerImage()
-    data_dir = Directory()
 
     def __init__(self, name, data_dir, target_dir):
         self.name: str = name
@@ -104,8 +103,8 @@ class Factorio(DockerServer):
         if self.volume.source_dir_owner_id != 845 or self.volume.source_dir_group_id != 845:
             e = f'Did you forget to set the owner of the data directory?'
             e += f'\nYour server might not work as intended;'
-            e += f' please set uid and guid for {self.data_dir} to 845, e.g.'
-            e += f'\nsudo chown 845:845 {self.volume.source}'
+            e += f' please set "uid" and "gid" for {self.volume.source} to 845.'
+            e += f'\nE.g. sudo chown 845:845 {self.volume.source}'
             logger.warning(e)
 
     def accept_license(self) -> None:
