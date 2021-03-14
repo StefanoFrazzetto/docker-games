@@ -103,8 +103,10 @@ class Factorio(DockerServer):
         # game server runs as 'factorio' user with user id 845
         if self.volume.source_dir_owner_id != 845 or self.volume.source_dir_group_id != 845:
             e = f'Did you forget to set the owner of the data directory?'
+            e += f'\nYour server might not work as intended;'
+            e += f' please set uid and guid for {self.data_dir} to 845, e.g.'
             e += f'\nsudo chown 845:845 {self.volume.source}'
-            raise PermissionError(e)
+            logger.warning(e)
 
     def accept_license(self) -> None:
         pass
