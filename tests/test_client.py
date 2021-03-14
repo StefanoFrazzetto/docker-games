@@ -14,6 +14,7 @@ def kill_and_remove_container(container):
 def make_minecraft_server():
     minecraft = Minecraft('mcserver', '1GB', '/tmp/mcserver')
     minecraft.add_ports(25565, 25565)
+    minecraft.accept_license()
     return minecraft
 
 
@@ -22,6 +23,7 @@ def make_teamspeak_server():
     server.add_ports(9987, '9987/udp')
     server.add_ports(10011, 10011)
     server.add_ports(30033, 30033)
+    server.accept_license()
     return server
 
 
