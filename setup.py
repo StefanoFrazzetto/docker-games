@@ -4,7 +4,7 @@ with open('README.md', 'r', encoding='utf-8') as fh:
     long_description = fh.read()
     setuptools.setup(
         name='docker-games',
-        version='1.0.0-alpha1',
+        version='1.0.0-alpha2',
         author='Stefano Frazzetto',
         author_email='stefano+pypi@hey.com',
         description='Easily create game servers using Docker and Python.',
